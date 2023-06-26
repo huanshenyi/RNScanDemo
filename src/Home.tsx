@@ -1,9 +1,40 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  NativeModules,
+  PermissionsAndroid,
+} from 'react-native';
 
 export default () => {
+  useEffect(() => {
+    requestPermission();
+  }, []);
+  const requestPermission = async () => {
+    const check = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+    );
+    if (!check) {
+      const result = await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      ]);
+      if (
+        result[PermissionsAndroid.PERMISSIONS.CAMERA] ===
+        PermissionsAndroid.RESULTS.GRANTED
+      ) {
+        console.log('ok');
+      } else {
+        console.log('no');
+      }
+    }
+  };
   const [result, setResult] = useState<string>('result...');
-  const onButtonPress = () => {};
+  const onButtonPress = () => {
+    const {Scan} = NativeModules;
+    Scan.startScan();
+  };
   return (
     <View style={styles.root}>
       <Text style={styles.title}>native barCode Module</Text>
