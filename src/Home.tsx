@@ -31,9 +31,15 @@ export default () => {
     }
   };
   const [result, setResult] = useState<string>('result...');
-  const onButtonPress = () => {
+
+  const onButtonPress = async () => {
     const {Scan} = NativeModules;
-    Scan.startScan();
+    // callbackのタイプ
+    // Scan.startScan2((scanResult: string) => {
+    //   setResult(scanResult);
+    // });
+    // promiseのタイプ
+    setResult(await Scan.startScan());
   };
   return (
     <View style={styles.root}>

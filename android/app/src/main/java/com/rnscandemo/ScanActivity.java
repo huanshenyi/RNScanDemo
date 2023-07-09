@@ -7,11 +7,17 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
+
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zxing.ZXingView;
 
 public class ScanActivity extends AppCompatActivity implements QRCodeView.Delegate {
     private static final String TAG = "ScanActivity";
+
+    public static Promise promise = null;
+    public static Callback callback = null;
     ZXingView zXingView = null;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +55,9 @@ public class ScanActivity extends AppCompatActivity implements QRCodeView.Delega
     public void onScanQRCodeSuccess(String result) {
         vibrate();
       Log.i(TAG, "result=" + result);
+      promise.resolve(result);
+//      callback.invoke(result);
+      this.finish();
     }
 
     @Override
